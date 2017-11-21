@@ -1,0 +1,4 @@
+---
+- name: Printing Variable
+  debug:
+    msg: "{{ test_dictionary }}"
