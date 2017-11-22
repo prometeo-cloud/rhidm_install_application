@@ -6,8 +6,8 @@ driver:
 lint:
   name: yamllint
 platforms:
-  - name: instance
-    image: centos:7
+  - name: rhidm.my.domain
+    image: registry.access.redhat.com/rhel7:latest
 provisioner:
   name: ansible
   lint:

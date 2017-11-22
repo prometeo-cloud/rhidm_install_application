@@ -1,4 +1,6 @@
 ---
-- name: Printing Variable
-  debug:
-    msg: "{{ test_dictionary }}"
+- name: Update all packages
+  package: name=* state=latest
+
+- name: Install httpd
+  yum: name=httpd state=present
