@@ -1,6 +1,4 @@
 ---
-- name: Update all packages
-  package: name=* state=latest
-
-- name: Install httpd
-  yum: name=httpd state=present
+- name: Execute installation of Red Hat IdM
+  include: setup-idm.yml
+  when: ansible_virtualization_type != "docker"
