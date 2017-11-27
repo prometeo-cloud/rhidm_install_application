@@ -8,6 +8,9 @@ lint:
 platforms:
   - name: rhidm.my.domain
     image: registry.access.redhat.com/rhel7:latest
+    volumes:
+      - /etc/pki/consumer:/etc/pki/consumer:ro
+      - /etc/pki/entitlement:/etc/pki/entitlement:ro
 provisioner:
   name: ansible
   lint:

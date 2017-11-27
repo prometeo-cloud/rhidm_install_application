@@ -11,7 +11,7 @@
 - name: Install ipa-server-dns
   package: name=ipa-server-dns state=latest
 
-- name: Add host to /etc/hosts 
+- name: Add host to /etc/hosts
   lineinfile: dest=/etc/hosts regexp='.*{{ ansible_nodename }}$' line='{{ ansible_default_ipv4.address }} {{ ansible_nodename }} {{ ansible_hostname }}' state=present
 
 - name: Start rngd
@@ -28,14 +28,13 @@
     state: enabled
     immediate: true
   with_items:
-    - { port: 80, proto: tcp }
-    - { port: 443, proto: tcp }
-    - { port: 389, proto: tcp }
-    - { port: 88, proto: tcp }
-    - { port: 464, proto: tcp }
-    - { port: 53, proto: tcp }
-    - { port: 53, proto: udp }
-    - { port: 88, proto: udp }
-    - { port: 464, proto: udp }
-    - { port: 123, proto: udp }
-
+    - {port: 80, proto: tcp}
+    - {port: 443, proto: tcp}
+    - {port: 389, proto: tcp}
+    - {port: 88, proto: tcp}
+    - {port: 464, proto: tcp}
+    - {port: 53, proto: tcp}
+    - {port: 53, proto: udp}
+    - {port: 88, proto: udp}
+    - {port: 464, proto: udp}
+    - {port: 123, proto: udp}

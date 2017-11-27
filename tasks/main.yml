@@ -1,4 +1,5 @@
 ---
 - name: Execute installation of Red Hat IdM
+  become: "True"
   include: setup-idm.yml
   when: ansible_virtualization_type != "docker"
