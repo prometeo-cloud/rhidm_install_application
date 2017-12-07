@@ -35,20 +35,21 @@
   command: ipa-server-install --hostname={{ ansible_nodename }} --domain={{ ansible_domain }} --realm={{ ansible_domain|upper }} --ds-password={{ rhidm_default_password }} --admin-password={{ rhidm_default_password }} -U
   when: ipasysrestore.stat.exists == False
 
+- name: Check if firewalld is in use
+  shell: "which firewall-cmd 2>&1 > /dev/null && firewall-cmd --state ; exit 0"
+  register: firewalldstate
+
+- debug: msg="{{ rhidm_firewall_ports }}"
+  ignore_errors: true
+
+- debug: var="{{ rhidm_firewall_ports }}"
+  ignore_errors: true
+
 - name: Add firewalld rules
+  when: firewalldstate.stdout | match("running")
   firewalld:
     port: "{{ item.port }}/{{ item.proto }}"
     permanent: true
     state: enabled
     immediate: true
-  with_items:
-    - {port: 80, proto: tcp}
-    - {port: 443, proto: tcp}
-    - {port: 389, proto: tcp}
-    - {port: 88, proto: tcp}
-    - {port: 464, proto: tcp}
-    - {port: 53, proto: tcp}
-    - {port: 53, proto: udp}
-    - {port: 88, proto: udp}
-    - {port: 464, proto: udp}
-    - {port: 123, proto: udp}
+  with_items: "{{ rhidm_firewall_ports }}"

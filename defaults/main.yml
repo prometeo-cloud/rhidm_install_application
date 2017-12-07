@@ -1,2 +1,13 @@
 ---
 ansible_become: True
+rhidm_firewall_ports:
+  - {port: 80, proto: tcp}
+  - {port: 443, proto: tcp}
+  - {port: 389, proto: tcp}
+  - {port: 88, proto: tcp}
+  - {port: 464, proto: tcp}
+  - {port: 53, proto: tcp}
+  - {port: 53, proto: udp}
+  - {port: 88, proto: udp}
+  - {port: 464, proto: udp}
+  - {port: 123, proto: udp}
