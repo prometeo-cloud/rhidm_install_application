@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  roles:
+    - role: rhel_set_hostname
+    - role: rhel_register_node
+    - role: rhidm_install_application

@@ -1,0 +1,6 @@
+---
+- name: rhel_set_hostname
+  src: https://github.com/prometeo-cloud/rhel_set_hostname
+
+- name: rhel_register_node
+  src: https://github.com/prometeo-cloud/rhel_register_node

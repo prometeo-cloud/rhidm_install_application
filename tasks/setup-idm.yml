@@ -8,8 +8,8 @@
 - name: Install ipa-server
   package: name=ipa-server state=latest
 
-- name: Install ipa-server-dns
-  package: name=ipa-server-dns state=latest
+- name: Remove host from /etc/hosts
+  lineinfile: dest=/etc/hosts regexp='.*{{ ansible_nodename }}.*' state=absent
 
 - name: Add host to /etc/hosts
   lineinfile: dest=/etc/hosts regexp='.*{{ ansible_nodename }}$' line='{{ ansible_default_ipv4.address }} {{ ansible_nodename }} {{ ansible_hostname }}' state=present
@@ -17,9 +17,23 @@
 - name: Start rngd
   service: name=rngd state=started
 
+- name: Check if a swapfile exists
+  stat: path="/swapfile"
+  register: swapfile
+
+- name: Setup swap
+  shell: fallocate -l 1G /swapfile && dd if=/dev/zero of=/swapfile bs=1024000 count=1000 && chmod 600 /swapfile && mkswap /swapfile && swapon /swapfile
+  when:
+    - ansible_memtotal_mb < 1024 or ansible_swaptotal_mb == 0
+    - swapfile.stat.exists == False
+
+- name: Check if IPA is already installed
+  stat: path="/var/lib/ipa/sysrestore/sysrestore.index"
+  register: ipasysrestore
+
 - name: Install ipa-server
-  command: ipa-server-install --setup-dns --hostname={{ ansible_nodename }} --domain={{ ansible_domain }} --realm={{ ansible_domain|upper }} --ds-password={{ default_password }} --admin-password={{ default_password }} --forwarder=192.168.1.1 --auto-reverse -U
-  ignore_errors: true
+  command: ipa-server-install --hostname={{ ansible_nodename }} --domain={{ ansible_domain }} --realm={{ ansible_domain|upper }} --ds-password={{ rhidm_default_password }} --admin-password={{ rhidm_default_password }} -U
+  when: ipasysrestore.stat.exists == False
 
 - name: Add firewalld rules
   firewalld:
