@@ -39,12 +39,6 @@
   shell: "which firewall-cmd 2>&1 > /dev/null && firewall-cmd --state ; exit 0"
   register: firewalldstate
 
-- debug: msg="{{ rhidm_firewall_ports }}"
-  ignore_errors: true
-
-- debug: var="{{ rhidm_firewall_ports }}"
-  ignore_errors: true
-
 - name: Add firewalld rules
   when: firewalldstate.stdout | match("running")
   firewalld:
